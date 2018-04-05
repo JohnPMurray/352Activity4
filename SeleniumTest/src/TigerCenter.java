@@ -18,7 +18,7 @@ public class TigerCenter{
   public void setUp() throws Exception {
     System.setProperty("webdriver.chrome.driver", "webdrivers/chromedriver");
     driver = new ChromeDriver(new ChromeOptions());
-    driver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
+    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
   @Test
@@ -105,7 +105,35 @@ public class TigerCenter{
     		}
     		
     }
+  }
     
+    @Test
+    public void test4() throws Exception {
+      driver.get("https://tigercenter.rit.edu/tigerCenterHome/#/landing");
+      driver.findElement(By.xpath("//button[@type='button']")).click();
+      driver.findElement(By.linkText("Advanced Search")).click();
+      driver.findElement(By.name("campus")).click();
+      new Select(driver.findElement(By.name("campus"))).selectByVisibleText("RIT Main");
+      driver.findElement(By.id("college")).click();
+      new Select(driver.findElement(By.id("college"))).selectByVisibleText("Golisano Col Comp&Info Science");
+      new Select(driver.findElement(By.id("majors"))).selectByVisibleText("SWEN - Software Engineering");
+      driver.findElement(By.id("instructorBox")).click();
+      driver.findElement(By.id("instructorBox")).clear();
+      driver.findElement(By.id("instructorBox")).sendKeys("Meneely");
+      driver.findElement(By.xpath("(//button[@type='submit'])[2]")).click();
+      Thread.sleep(1000);
+      driver.findElement(By.xpath("//tbody[@id='resultBody']/tr")).click();
+      System.out.println(driver.findElement(By.xpath("//h4[@id='classDetailsHeader']")).getText().substring(16));
+      java.util.List<WebElement> table = driver.findElements(By.xpath("//table[@id='classDetailsInfo']/tbody/tr"));
+      String innerHtml;
+      for (WebElement element : table) {
+      		innerHtml = element.findElement(By.tagName("span")).getText();
+      		if (innerHtml.equals("Days:") || innerHtml.equals("Times:") || innerHtml.equals("Instructor:") || innerHtml.equals("Location:")) {
+      			System.out.println(innerHtml + " " + element.findElements(By.tagName("span")).get(1).getText());
+      		}
+      		
+      }
+      
   }
 
   @After
